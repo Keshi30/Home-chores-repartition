@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profils - Tâches maison</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">🌟</div>
+      <div class="title">
+        <h1>Profils enfants</h1>
+        <p>Points, avatars et récompenses</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="tirage.html">Tirage</a>
+      <a href="profils.html">Profils</a>
+      <a href="mode-emploi.html">Mode d’emploi</a>
+    </nav>
+    <button class="theme" data-theme-toggle>◐</button>
+  </header>
+
+  <section class="card">
+    <h2>Points et récompenses</h2>
+    <div id="profilesGrid" class="people"></div>
+    <div class="card" style="margin-top:16px">
+      <strong>Récompenses</strong>
+      <div id="rewardList"></div>
+    </div>
+  </section>
+</div>
+
+<script src="scripts/data.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/profils.js"></script>
+</body>
+</html>
