@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mode d’emploi - Tâches maison</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">📘</div>
+      <div class="title">
+        <h1>Mode d’emploi</h1>
+        <p>Les consignes de chaque tâche</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="tirage.html">Tirage</a>
+      <a href="profils.html">Profils</a>
+      <a href="mode-emploi.html">Mode d’emploi</a>
+    </nav>
+    <button class="theme" data-theme-toggle>◐</button>
+  </header>
+
+  <section class="card">
+    <h2>Explications des tâches</h2>
+    <p class="muted">Quand tu cliques sur “Voir le mode d’emploi” depuis la page de tirage, tu arrives directement ici à la bonne tâche.</p>
+    <input class="search" id="search" placeholder="Chercher une tâche">
+    <div id="instructionList" style="display:grid;gap:12px;margin-top:12px"></div>
+  </section>
+</div>
+
+<script src="scripts/data.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/mode-emploi.js"></script>
+</body>
+</html>
