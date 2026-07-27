@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tirage - Tâches maison</title>
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="logo">🎲</div>
+      <div class="title">
+        <h1>Tirage des tâches</h1>
+        <p>Choisis les tâches et distribue-les au hasard</p>
+      </div>
+    </div>
+    <nav class="nav">
+      <a href="index.html">Accueil</a>
+      <a href="tirage.html">Tirage</a>
+      <a href="profils.html">Profils</a>
+      <a href="mode-emploi.html">Mode d’emploi</a>
+    </nav>
+    <button class="theme" data-theme-toggle>◐</button>
+  </header>
+
+  <section class="grid">
+    <article class="card">
+      <h2>Les personnes</h2>
+      <div class="people" id="peopleGrid"></div>
+
+      <h2 style="margin-top:16px">Tâches du jour</h2>
+      <div class="task-columns">
+        <div><h3>Quotidiennes</h3><div id="dailyTasks" class="tasks"></div></div>
+        <div><h3>Hebdomadaires</h3><div id="weeklyTasks" class="tasks"></div></div>
+      </div>
+
+      <div class="actions">
+        <button class="btn p" id="drawBtn">Faire le tirage</button>
+        <button class="btn s" id="quickBtn">Sélection rapide</button>
+        <button class="btn s" id="clearBtn">Tout décocher</button>
+        <button class="btn s" id="printBtn">Imprimer</button>
+      </div>
+
+      <section class="card" style="margin-top:16px">
+        <h2>Ajouter une tâche</h2>
+        <form class="task-form" id="taskForm">
+          <input id="newTaskName" placeholder="Ex.: ranger les chaussures" required>
+          <select id="newTaskType">
+            <option value="daily">Quotidienne</option>
+            <option value="weekly">Hebdomadaire</option>
+          </select>
+          <input id="newTaskPoints" type="number" min="0" value="1" placeholder="Points">
+          <textarea id="newTaskInstructions" placeholder="Une étape par ligne"></textarea>
+          <button class="btn p" type="submit">Ajouter</button>
+        </form>
+      </section>
+    </article>
+
+    <aside class="card">
+      <h2>Résultat du tirage</h2>
+      <div class="stats">
+        <div class="stat"><span>Tâches choisies</span><strong id="selectedCount">0</strong></div>
+        <div class="stat"><span>Personnes actives</span><strong id="peopleCount">0</strong></div>
+        <div class="stat"><span>Dernier tirage</span><strong id="lastDraw">—</strong></div>
+        <div class="stat"><span>Points donnés</span><strong id="doneCount">0</strong></div>
+      </div>
+      <div id="results" style="display:grid;gap:10px;margin-top:14px"></div>
+      <div style="margin-top:14px">
+        <h3>Résumé par personne</h3>
+        <div id="summaryList" style="display:grid;gap:10px"></div>
+      </div>
+    </aside>
+  </section>
+</div>
+
+<script src="scripts/data.js"></script>
+<script src="scripts/app.js"></script>
+<script src="scripts/tirage.js"></script>
+</body>
+</html>
