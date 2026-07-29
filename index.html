@@ -163,4 +163,447 @@
     }
     .task strong { display: block; }
     .task span, .mini { font-size: .88rem; color: var(--muted); }
-    .task butt
+    .task button {
+      margin-top: 8px;
+      background: none;
+      color: var(--primary);
+      text-decoration: underline;
+      padding: 0;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      min-height: 44px;
+      padding: 0 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .p { background: var(--primary); color: white; }
+    .s { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .stat span {
+      display: block;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .results {
+      display: grid;
+      gap: 10px;
+    }
+
+    .assignment {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      padding: 14px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, color-mix(in srgb, var(--primary) 10%, var(--surface2)), var(--surface2));
+      border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
+    }
+
+    .assignment.done {
+      background: linear-gradient(135deg, color-mix(in srgb, var(--good) 14%, var(--surface2)), var(--surface2));
+    }
+
+    .badge {
+      display: inline-flex;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--primary) 14%, var(--surface2));
+      color: var(--primary);
+      font-weight: 800;
+      font-size: .78rem;
+    }
+
+    .donebtn {
+      min-height: 42px;
+      padding: 0 12px;
+      border-radius: 999px;
+      font-weight: 800;
+      background: color-mix(in srgb, var(--good) 18%, var(--surface2));
+      color: var(--good);
+    }
+    .donebtn.done { background: var(--good); color: white; }
+
+    .empty {
+      padding: 40px 16px;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed var(--border);
+      border-radius: 18px;
+    }
+
+    @media (max-width: 900px) {
+      .hero, .task-columns, .stats, .people { grid-template-columns: 1fr 1fr; }
+      .assignment { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 650px) {
+      .hero, .task-columns, .stats, .people { grid-template-columns: 1fr; }
+      .top { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo">🏠</div>
+        <div class="title">
+          <h1>Tâches maison</h1>
+          <p>Version ludique pour enfants avec photos</p>
+        </div>
+      </div>
+      <button class="theme" data-theme-toggle>◐</button>
+    </header>
+
+    <section class="hero">
+      <article class="card">
+        <h2>Bienvenue</h2>
+        <p>Choisis les tâches, fais le tirage, puis ajoute les points aux enfants.</p>
+        <div class="actions">
+          <a class="btn p" href="#tirage">Aller au tirage</a>
+          <a class="btn s" href="#explications">Voir le mode d’emploi</a>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>Comment ça marche</h2>
+        <div class="step"><strong>1. Choisir les personnes</strong><div class="mini">Tu peux modifier les noms et ajouter une photo.</div></div>
+        <div class="step"><strong>2. Coche les tâches</strong><div class="mini">Quotidiennes ou hebdomadaires.</div></div>
+        <div class="step"><strong>3. Fais le tirage</strong><div class="mini">L’application répartit les tâches au hasard.</div></div>
+        <div class="step"><strong>4. Donne les points</strong><div class="mini">Quand la tâche est finie, les points s’ajoutent.</div></div>
+      </article>
+    </section>
+
+    <section class="card" id="profils">
+      <h2>Profils enfants</h2>
+      <p class="muted">Chaque enfant peut avoir un nom et une photo. Les photos sont sauvegardées dans le navigateur.</p>
+      <div class="people" id="peopleGrid"></div>
+    </section>
+
+    <section class="card" id="tirage">
+      <h2>Tâches</h2>
+      <div class="task-columns">
+        <div>
+          <h3>Quotidiennes</h3>
+          <div id="dailyTasks"></div>
+        </div>
+        <div>
+          <h3>Hebdomadaires</h3>
+          <div id="weeklyTasks"></div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn p" id="drawBtn">Faire le tirage</button>
+        <button class="btn s" id="quickBtn">Sélection rapide</button>
+        <button class="btn s" id="clearBtn">Tout décocher</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Résultat du tirage</h2>
+      <div class="stats">
+        <div class="stat"><span>Tâches choisies</span><strong id="selectedCount">0</strong></div>
+        <div class="stat"><span>Personnes actives</span><strong id="peopleCount">0</strong></div>
+        <div class="stat"><span>Dernier tirage</span><strong id="lastDraw">—</strong></div>
+        <div class="stat"><span>Points donnés</span><strong id="doneCount">0</strong></div>
+      </div>
+      <div id="results" class="results"></div>
+    </section>
+
+    <section class="card" id="explications">
+      <h2>Mode d’emploi</h2>
+      <p>Les consignes sont dans la liste ci-dessous. Clique sur une tâche pour la voir en détail.</p>
+      <input class="search" id="search" placeholder="Chercher une tâche">
+      <div id="instructionList"></div>
+    </section>
+  </div>
+
+  <script>
+    const APP_KEY = "taches-maison-enfants-v1";
+
+    const defaultData = {
+      people: [
+        { name: "Léo", role: "Enfant", color: "#f59e0b", points: 0, avatar: "" },
+        { name: "Mia", role: "Enfant", color: "#ec4899", points: 0, avatar: "" },
+        { name: "Noah", role: "Enfant", color: "#3b82f6", points: 0, avatar: "" },
+        { name: "Parent", role: "Parent", color: "#10b981", points: 0, avatar: "" },
+        { name: "Aide", role: "Autre", color: "#8b5cf6", points: 0, avatar: "" }
+      ],
+      tasks: [
+        { id: "litiere-chat", name: "Litière du chat", type: "daily", points: 2, instructions: ["Mettre des gants si besoin.", "Retirer les morceaux sales.", "Jeter dans un sac fermé.", "Ajouter un peu de litière propre."] },
+        { id: "caca-chien", name: "Caca du chien dehors", type: "daily", points: 2, instructions: ["Prendre un sac.", "Ramasser les besoins.", "Jeter au bon endroit."] },
+        { id: "ramasser-planchers", name: "Ramasser les planchers", type: "daily", points: 1, instructions: ["Faire le tour des pièces.", "Ramasser les objets au sol.", "Remettre chaque chose à sa place."] },
+        { id: "vider-lave-vaisselle", name: "Vider le lave-vaisselle", type: "daily", points: 2, instructions: ["Ouvrir prudemment.", "Sortir la vaisselle.", "Ranger chaque chose à sa place."] },
+        { id: "plier-linge", name: "Plier le linge", type: "daily", points: 2, instructions: ["Séparer le linge.", "Plier chaque morceau.", "Faire une pile par personne."] },
+        { id: "faire-lavage", name: "Faire le lavage", type: "daily", points: 3, instructions: ["Séparer les vêtements.", "Ajouter le savon.", "Choisir le cycle.", "Démarrer la machine."] },
+        { id: "accrocher-linge", name: "Accrocher le linge sur la corde", type: "daily", points: 2, instructions: ["Apporter le panier.", "Secouer les morceaux.", "Fixer avec des épingles."] },
+        { id: "balayeuse-marches", name: "Passer la balayeuse dans les marches", type: "daily", points: 2, instructions: ["Dégager les marches.", "Commencer par le haut.", "Finir les coins."] },
+        { id: "balayeuse-bas", name: "Passer la balayeuse en bas", type: "daily", points: 2, instructions: ["Ramasser les objets.", "Faire des lignes régulières.", "Passer les coins."] },
+        { id: "ramasser-bas", name: "Ramasser le plancher en bas", type: "daily", points: 1, instructions: ["Faire le tour.", "Remettre les objets.", "Laisser le sol dégagé."] },
+        { id: "epousseter", name: "Épousseter", type: "weekly", points: 3, instructions: ["Prendre un chiffon.", "Commencer par le haut.", "Finir en bas."] },
+        { id: "sdb", name: "Nettoyer la salle de bain", type: "weekly", points: 5, instructions: ["Ranger les objets.", "Nettoyer lavabo et toilette.", "Finir par le miroir et le plancher."] },
+        { id: "miroirs", name: "Laver les miroirs", type: "weekly", points: 2, instructions: ["Mettre un peu de produit.", "Essuyer régulièrement.", "Vérifier les traces."] },
+        { id: "frigo", name: "Nettoyer le frigo", type: "weekly", points: 4, instructions: ["Sortir les aliments.", "Essuyer les tablettes.", "Ranger de nouveau."] },
+        { id: "poignees", name: "Laver les poignées de porte", type: "weekly", points: 1, instructions: ["Prendre un chiffon.", "Essuyer les poignées.", "Laisser sécher."] },
+        { id: "draps", name: "Changer les draps", type: "weekly", points: 3, instructions: ["Enlever les draps sales.", "Mettre les draps propres.", "Finir avec les oreillers."] },
+        { id: "plancher-bas", name: "Laver le plancher du bas", type: "weekly", points: 4, instructions: ["Passer la balayeuse.", "Préparer l’eau.", "Laver par sections."] },
+        { id: "jouets", name: "Trier les jouets ou objets qui traînent", type: "weekly", points: 2, instructions: ["Faire des piles.", "Remettre les objets.", "Vider le surplus."] }
+      ],
+      selectedTasks: [],
+      assignments: [],
+      completedKeys: [],
+      lastDraw: "—"
+    };
+
+    let data = loadData();
+
+    function loadData() {
+      const saved = localStorage.getItem(APP_KEY);
+      if (!saved) return structuredClone(defaultData);
+      try { return { ...structuredClone(defaultData), ...JSON.parse(saved) }; }
+      catch { return structuredClone(defaultData); }
+    }
+    function saveData(d) { localStorage.setItem(APP_KEY, JSON.stringify(d)); }
+    function shuffle(array) { const copy = [...array]; for (let i = copy.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [copy[i], copy[j]] = [copy[j], copy[i]]; } return copy; }
+
+    function setupThemeToggle() {
+      const btn = document.querySelector("[data-theme-toggle]");
+      const root = document.documentElement;
+      const saved = localStorage.getItem("app-theme") || "light";
+      root.setAttribute("data-theme", saved);
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+        root.setAttribute("data-theme", next);
+        localStorage.setItem("app-theme", next);
+      });
+    }
+
+    function taskById(id) { return data.tasks.find(task => task.id === id); }
+
+    function renderPeople() {
+      const grid = document.getElementById("peopleGrid");
+      grid.innerHTML = data.people.map((person, index) => `
+        <article class="person">
+          <div class="avatar" style="background:${person.color}">
+            ${person.avatar ? `<img src="${person.avatar}" alt="${person.name}" style="width:100%;height:100%;object-fit:cover">` : person.name.charAt(0)}
+          </div>
+          <input value="${person.name}" data-person-name="${index}" placeholder="Nom">
+          <label class="btn s" style="margin-top:8px">
+            Choisir une photo
+            <input type="file" accept="image/*" capture="user" style="display:none" data-person-photo="${index}">
+          </label>
+        </article>
+      `).join("");
+    }
+
+    function taskCard(task) {
+      return `
+        <label class="task">
+          <input type="checkbox" data-task-id="${task.id}" ${data.selectedTasks.includes(task.id) ? "checked" : ""}>
+          <div>
+            <strong>${task.name}</strong>
+            <span>${task.type === "daily" ? "Quotidienne" : "Hebdomadaire"} · ${task.points} pts</span>
+            <button type="button" data-open="${task.id}">Voir le mode d’emploi</button>
+          </div>
+        </label>
+      `;
+    }
+
+    function renderTasks() {
+      document.getElementById("dailyTasks").innerHTML = data.tasks.filter(t => t.type === "daily").map(taskCard).join("");
+      document.getElementById("weeklyTasks").innerHTML = data.tasks.filter(t => t.type === "weekly").map(taskCard).join("");
+      updateCounts();
+    }
+
+    function updateCounts() {
+      document.getElementById("selectedCount").textContent = data.selectedTasks.length;
+      document.getElementById("peopleCount").textContent = data.people.filter(p => p.name.trim()).length;
+      document.getElementById("lastDraw").textContent = data.lastDraw;
+      document.getElementById("doneCount").textContent = data.completedKeys.length;
+    }
+
+    function renderResults() {
+      const resultsEl = document.getElementById("results");
+      if (!data.assignments.length) {
+        resultsEl.innerHTML = `<div class="empty">Aucune répartition pour l’instant.</div>`;
+        updateCounts();
+        return;
+      }
+
+      resultsEl.innerHTML = data.assignments.map((assignment, index) => {
+        const key = `${assignment.taskId}__${assignment.personName}__${index}`;
+        const done = data.completedKeys.includes(key);
+        const task = taskById(assignment.taskId);
+        return `
+          <article class="assignment ${done ? "done" : ""}">
+            <div>
+              <small>${assignment.type === "daily" ? "Aujourd’hui" : "Cette semaine"}</small>
+              <strong>${assignment.taskName}</strong>
+              <div class="mini">${task.points} point${task.points > 1 ? "s" : ""}</div>
+            </div>
+            <div class="badge">${assignment.personName}</div>
+            <button class="donebtn ${done ? "done" : ""}" data-done="${key}">${done ? "Terminée" : "Terminer + points"}</button>
+          </article>
+        `;
+      }).join("");
+      updateCounts();
+    }
+
+    function drawAssignments() {
+      const activePeople = data.people.filter(p => p.name.trim()).map(p => p.name);
+      const selected = data.tasks.filter(t => data.selectedTasks.includes(t.id));
+      if (!activePeople.length || !selected.length) return;
+
+      const shuffledPeople = shuffle(activePeople);
+      data.assignments = shuffle(selected).map((task, index) => ({
+        taskId: task.id,
+        taskName: task.name,
+        type: task.type,
+        personName: shuffledPeople[index % shuffledPeople.length]
+      }));
+
+      data.completedKeys = [];
+      data.lastDraw = new Date().toLocaleTimeString("fr-CA", { hour: "2-digit", minute: "2-digit" });
+      saveData(data);
+      renderResults();
+    }
+
+    function quickSelect() {
+      data.selectedTasks = data.tasks.filter(t => t.type === "daily").slice(0, 5).map(t => t.id);
+      saveData(data);
+      renderTasks();
+    }
+
+    function clearAll() {
+      data.selectedTasks = [];
+      data.assignments = [];
+      data.completedKeys = [];
+      data.lastDraw = "—";
+      saveData(data);
+      renderTasks();
+      renderResults();
+    }
+
+    function completeTask(key) {
+      if (data.completedKeys.includes(key)) return;
+      data.completedKeys.push(key);
+      const [taskId, personName] = key.split("__");
+      const task = taskById(taskId);
+      const person = data.people.find(p => p.name === personName);
+      if (task && person) person.points += task.points;
+      saveData(data);
+      renderResults();
+      renderPeople();
+    }
+
+    function renderInstructions(filter = "") {
+      const instructionList = document.getElementById("instructionList");
+      const q = filter.trim().toLowerCase();
+      const items = data.tasks.filter(t => t.name.toLowerCase().includes(q));
+
+      instructionList.innerHTML = items.length ? items.map(task => `
+        <article class="instruction" id="${task.id}">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <h3>${task.name}</h3>
+            <span class="badge">${task.type === "daily" ? "Quotidienne" : "Hebdomadaire"} · ${task.points} pts</span>
+          </div>
+          <ol>
+            ${task.instructions.map(step => `<li>${step}</li>`).join("")}
+          </ol>
+          <p class="mini"><a href="#tirage">Retour au tirage</a></p>
+        </article>
+      `).join("") : `<div class="empty">Aucune tâche trouvée.</div>`;
+    }
+
+    renderPeople();
+    renderTasks();
+    renderResults();
+    renderInstructions();
+    setupThemeToggle();
+
+    document.addEventListener("change", e => {
+      const nameInput = e.target.closest("[data-person-name]");
+      const photoInput = e.target.closest("[data-person-photo]");
+      const taskInput = e.target.closest("[data-task-id]");
+
+      if (nameInput) {
+        data.people[Number(nameInput.dataset.personName)].name = nameInput.value;
+        saveData(data);
+        updateCounts();
+      }
+
+      if (photoInput) {
+        const index = Number(photoInput.dataset.personPhoto);
+        const file = photoInput.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          data.people[index].avatar = reader.result;
+          saveData(data);
+          renderPeople();
+        };
+        reader.readAsDataURL(file);
+      }
+
+      if (taskInput) {
+        const id = taskInput.dataset.taskId;
+        if (taskInput.checked) {
+          if (!data.selectedTasks.includes(id)) data.selectedTasks.push(id);
+        } else {
+          data.selectedTasks = data.selectedTasks.filter(t => t !== id);
+        }
+        saveData(data);
+        updateCounts();
+      }
+    });
+
+    document.addEventListener("click", e => {
+      const open = e.target.closest("[data-open]");
+      const done = e.target.closest("[data-done]");
+
+      if (open) {
+        const target = document.getElementById(open.dataset.open);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      if (done) {
+        completeTask(done.dataset.done);
+      }
+    });
+
+    document.getElementById("drawBtn").addEventListener("click", drawAssignments);
+    document.getElementById("quickBtn").addEventListener("click", quickSelect);
+    document.getElementById("clearBtn").addEventListener("click", clearAll);
+    document.getElementById("search").addEventListener("input", e => renderInstructions(e.target.value));
+  </script>
+</body>
+</html>
