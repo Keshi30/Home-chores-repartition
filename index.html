@@ -4,51 +4,163 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tâches maison enfants</title>
-  <link rel="stylesheet" href="styles/main.css">
-</head>
-<body>
-<div class="wrap">
-  <header class="top">
-    <div class="brand">
-      <div class="logo">🏠</div>
-      <div class="title">
-        <h1>Tâches maison</h1>
-      </div>
-    </div>
-    <nav class="nav">
-      <a href="index.html">Accueil</a>
-      <a href="tirage.html">Tirage</a>
-      <a href="profils.html">Profils</a>
-      <a href="mode-emploi.html">Mode d’emploi</a>
-    </nav>
-    <button class="theme" data-theme-toggle>◐</button>
-  </header>
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --surface: #ffffff;
+      --surface2: #eef6ff;
+      --text: #1f2937;
+      --muted: #667085;
+      --primary: #0f766e;
+      --primary2: #2563eb;
+      --accent: #f59e0b;
+      --good: #16a34a;
+      --border: #dbe3ef;
+      --shadow: 0 10px 30px rgba(15,23,42,.08);
+      --r: 20px;
+      --font: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    [data-theme="dark"] {
+      --bg: #0b1220;
+      --surface: #111827;
+      --surface2: #172033;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --primary: #2dd4bf;
+      --primary2: #60a5fa;
+      --accent: #fbbf24;
+      --good: #4ade80;
+      --border: #243244;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      background: radial-gradient(circle at top right, color-mix(in srgb, var(--primary) 12%, transparent), transparent 28%), var(--bg);
+      color: var(--text);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input { font: inherit; }
+    button { cursor: pointer; border: 0; }
 
-  <section class="hero">
-    <article class="card">
-      <h2>Bienvenue dans la maison des missions</h2>
-      <p class="muted">Chaque enfant a un profil, des points et des tâches. Les consignes sont sur une page séparée pour être plus facile à lire.</p>
-      <p><strong>Astuce :</strong> clique sur “Voir le mode d’emploi” dans une tâche pour aller directement à la page explicative.</p>
-      <div class="actions">
-        <a class="btn p" href="tirage.html">Commencer le tirage</a>
-        <a class="btn s" href="mode-emploi.html">Aller aux explications</a>
-      </div>
-<section class="card" id="profils">
-  <h2>Profils enfants</h2>
-  <div class="people" id="peopleGrid"></div>
-</section>
-    </article>
-    <article class="card">
-      <h2>Comment ça marche</h2>
-      <div class="step"><strong>1. Choisir les tâches</strong><div class="mini">Coche ce qui doit être fait aujourd’hui ou cette semaine.</div></div>
-      <div class="step" style="margin-top:10px"><strong>2. Tirer au hasard</strong><div class="mini">L’application choisit une personne pour chaque tâche.</div></div>
-      <div class="step" style="margin-top:10px"><strong>3. Voir les points</strong><div class="mini">Quand une tâche est terminée, on ajoute les points.</div></div>
-    </article>
-  </section>
-</div>
-<script src="scripts/data.js"></script>
-<script src="scripts/app.js"></script>
-<script>setupThemeToggle();</script>
-</body>
-</html>
-</html>
+    .wrap {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 16px;
+      z-index: 5;
+    }
+
+    .brand { display: flex; gap: 12px; align-items: center; }
+    .logo {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary2));
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 800;
+    }
+    .title h1 { margin: 0; }
+    .title p { margin: 2px 0 0; color: var(--muted); }
+
+    .theme {
+      min-width: 44px;
+      min-height: 44px;
+      border-radius: 999px;
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .people {
+      display: grid;
+      grid-template-columns: repeat(5,minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .person, .task, .step, .instruction, .result {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px;
+    }
+
+    .person input, .search {
+      width: 100%;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .avatar {
+      width: 52px;
+      height: 52px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      color: white;
+      font-weight: 900;
+      background: var(--primary);
+      overflow: hidden;
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .task-columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .task {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+    .task input[type=checkbox] {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+    }
+    .task strong { display: block; }
+    .task span, .mini { font-size: .88rem; color: var(--muted); }
+    .task butt
